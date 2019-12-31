@@ -43,7 +43,7 @@ tab_height = 75
 tab_width = 145
 
 
-
+meth1sol = [] # method 1 solution 
 class Presentation():
 	''' The window in which the presentation is housed'''
 	def __init__(self, root):
@@ -62,11 +62,11 @@ class Presentation():
 		self.cartesian = tk.Canvas(square)
 		self.cartesian.place(width = 1100, height = 650, x = 50, y = 50)
 #bar Buttons
-		method1 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 1")
+		method1 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 1", command = lambda: self.method_1(li))
 		method1.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(0))
 		method2 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 2")
 		method2.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(1))
-		method3 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 3", command =lambda: self.method_3(li))
+		method3 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 3", command =lambda: self.connect(li, method3_colour))
 		method3.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(2))
 		gen10 = tk.Button(bar, bd = 0, bg = button_colour, text = "generate 10 points",command = lambda: self.show_points(10))
 		gen10.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(3))
@@ -111,7 +111,7 @@ class Presentation():
 			x = i.x
 			y = i.y
 			self.cartesian.create_oval(x-1,y-1, x+1, y+1, fill = "black")
-	def method_3(self,li):
+	def connect(self,li, c):
 		sumdis = 0
 		try:
 			t0 = dt.time()
@@ -122,7 +122,7 @@ class Presentation():
 				y2 = li[i+1].y
 				d = li[i].distance(li[i+1])
 				sumdis +=d
-				self.cartesian.create_line(x1,y1,x2,y2, fill = method3_colour)
+				self.cartesian.create_line(x1,y1,x2,y2, fill = c)
 			x1 = li[0].x
 			y1 = li[0].y
 			x2 = li[-1].x
@@ -132,7 +132,8 @@ class Presentation():
 			d = round(d, 2)
 			t = dt.time() - t0
 			t = round(t, 2)
-			self.cartesian.create_line(x1,y1,x2,y2, fill = method3_colour)
+			self.cartesian.create_line(x1,y1,x2,y2, fill = c)
+
 			self.method3_distance.configure(text = "distance:\n{}".format(d))
 			self.method3_time.configure(text = "time:\n{} s".format(t))
 		except:
@@ -145,8 +146,55 @@ class Presentation():
 		self.cartesian.delete("all")
 		li = []
 
+	def method_1(self, li):
+		matrix = []
+		r = []
+		for i in li:
+			for j in li:
+				r.append(i.distance(j))
+			matrix.append(r)
+		n = len(matrix)
+		V = range(n)
+		E = [(i,j) for i in V for j in V if i!=j]
+		pm.begin('subtour elimination')
+		x = pm.var('x', E, bool)
+		pm.minimize(sum(matrix[i][j]*x[i,j] for i,j in E), 'dist')
+		for k in V:
+			sum( x[k,j] for j in V if j!=k ) == 1
+			sum( x[i,k] for i in V if i!=k ) == 1
+			pm.solver(float, msg_lev = pm.glpk.GLP_MSG_OFF)
+			pm.solver(int, msg_lev= pm.glpk.GLP_MSG_OFF)
+			pm.solve()
+		global subtourg
+		def subtourl(x):
+			succ = 0
+			subt = [succ] #start from node 0
+			while True:
+				succ=sum(x[succ,j].primal*j for j in V if j!=succ)
+				if succ == 0: break #tour found
+				subt.append(int(succ+0.5))
+			return subt
+		subtourg = subtourl
+		while True:
+		   subt = subtourg(x)
+		   if len(subt) == n:
+		      print("Optimal tour length: %g"%pm.vobj())
+		      print("Optimal tour:"); print(subt)
+		      break
+		   print("New subtour: %r"% subt)
+		   if len(subt) == 1: break #something wrong
+		   #now add a subtour elimination constraint:
+		   nots = [j for j in V if j not in subt]
+		   sum(x[i,j] for i in subt for j in nots) >= 1
+		   pm.solve() #solve the IP problem again
+		pm.end()
+		for i in subt:
+			meth1sol.append(li[i])
+		self.connect(meth1sol, method1_colour)
+
 
 root = tk.Tk()
 a = Presentation(root)
 root.mainloop()
+
 		
