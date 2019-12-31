@@ -169,7 +169,6 @@ class Presentation():
 
 	def method_1(self):
 		matrix = []
-		
 		meth1sol = []
 		for i in li:
 			r = []
