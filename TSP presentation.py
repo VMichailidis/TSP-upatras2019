@@ -80,7 +80,7 @@ class Presentation():
 #bar Buttons
 		method1 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 1", command = lambda: self.method_1())
 		method1.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(0))
-		method2 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 2")
+		method2 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 2", command = self.method_2)
 		method2.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(1))
 		method3 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 3", command =lambda: self.connect(li, method3_colour, 3))
 		method3.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(2))
@@ -214,6 +214,35 @@ class Presentation():
 			meth1sol.append(li[i])
 		self.connect(meth1sol, method1_colour, 1)
 		
+	def method_2(self):
+		liin = []
+		for i in li:
+			r = []
+			for j in li:
+				r.append(i.distance(j))
+			liin.append(r)
+		print("liin: {}".format(liin))
+		liout=[]  #output cities
+		for i in range(len(liin)):
+			del liin[i][i]
+			liin[i].insert(i,99999999)
+		print("liin: {}".format(liin))
+		z = 0
+		for i in range(len(liin)):
+			y=min(liin[z])
+			k=liin[z].index(y)
+			del liin[k][z]
+			liin[k].insert(z, 999999999)
+			liout.append(k)
+			print(z, k, liin[k][z], liin [z][k])
+			for j in liin:
+				j[z] = 9999999
+			z = k
+		print(liout)
+		meth2sol = []
+		for i in liout:
+			meth2sol.append(li[i])
+		self.connect(meth2sol, method2_colour, 2)
 
 
 root = tk.Tk()
