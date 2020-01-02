@@ -130,37 +130,37 @@ class Presentation():
 			x = i.x
 			y = i.y
 			self.cartesian.create_oval(x-1,y-1, x+1, y+1, fill = "black")
-	def connect(self,l, c, v):
+	def connect(self, l, c, v):
 		sumdis = 0
-		try:
-			t0 = dt.time()
-			for i in range(len(l)-1):
-				x1 = l[i].x
-				y1 = l[i].y
-				x2 = l[i+1].x
-				y2 = l[i+1].y
-				d = l[i].distance(l[i+1])
-				sumdis +=d
-				self.cartesian.create_line(x1,y1,x2,y2, fill = c)
-			x1 = l[0].x
-			y1 = l[0].y
-			x2 = l[-1].x
-			y2 = l[-1].y
-			d = l[0].distance(l[-1])
-			sumdis+=d
-			d = round(d, 2)
-			t = dt.time() - t0
-			t = round(t, 2)
+		# try:
+		t0 = dt.time()
+		for i in range(len(l)-1):
+			x1 = l[i].x
+			y1 = l[i].y
+			x2 = l[i+1].x
+			y2 = l[i+1].y
+			d = l[i].distance(l[i+1])
+			sumdis +=d
+			#print(sumdis)
 			self.cartesian.create_line(x1,y1,x2,y2, fill = c)
+		x1 = l[0].x
+		y1 = l[0].y
+		x2 = l[-1].x
+		y2 = l[-1].y
+		d = l[0].distance(l[-1])
+		sumdis+=d
+		sumdis = round(sumdis, 2)
+		t = dt.time() - t0
+		t = round(t, 2)
+		self.cartesian.create_line(x1,y1,x2,y2, fill = c)
 
-			self.dist_var[v-1].set("distance:\n{}".format(d))
-			self.time_var[v-1].set("time:\n{}".format(t))
-
-		except:
-			d = 0
-			t = 0
-			self.d3.set("distance:\n{}".format(d))
-			self.t3.set("time:\n{}".format(t))
+		self.dist_var[v-1].set("distance:\n{}".format(sumdis))
+		self.time_var[v-1].set("time:\n{}".format(t))
+		# except:
+		# 	d = 0
+		# 	t = 0
+		# 	self.dist_var[v-1].set("distance:\n{}".format(d))
+		# 	self.time_var[v-1].set("time:\n{}".format(t))
 		print("d:"+str(d))
 	def clear(self):
 		global li
@@ -200,8 +200,8 @@ class Presentation():
 		while True:
 		   subt = subtourg(x)
 		   if len(subt) == n:
-		      print("Optimal tour length: %g"%pm.vobj())
-		      print("Optimal tour:"); print(subt)
+		      #print("Optimal tour length: %g"%pm.vobj())
+		      #print("Optimal tour:"); print(subt)
 		      break
 		   print("New subtour: %r"% subt)
 		   if len(subt) == 1: break #something wrong
@@ -210,8 +210,10 @@ class Presentation():
 		   sum(x[i,j] for i in subt for j in nots) >= 1
 		   pm.solve() #solve the IP problem again
 		pm.end()
+		print(subt)
 		for i in subt:
 			meth1sol.append(li[i])
+		print(len(meth1sol))
 		self.connect(meth1sol, method1_colour, 1)
 		
 	def method_2(self):
@@ -221,12 +223,12 @@ class Presentation():
 			for j in li:
 				r.append(i.distance(j))
 			liin.append(r)
-		print("liin: {}".format(liin))
+		#print("liin: {}".format(liin))
 		liout=[]  #output cities
 		for i in range(len(liin)):
 			del liin[i][i]
-			liin[i].insert(i,99999999)
-		print("liin: {}".format(liin))
+			liin[i].insert(i,999999999)
+		#print("liin: {}".format(liin))
 		z = 0
 		for i in range(len(liin)):
 			y=min(liin[z])
@@ -234,16 +236,16 @@ class Presentation():
 			del liin[k][z]
 			liin[k].insert(z, 999999999)
 			liout.append(k)
-			print(z, k, liin[k][z], liin [z][k])
+			#print(z, k, liin[k][z], liin [z][k])
 			for j in liin:
-				j[z] = 9999999
+				j[z] = 999999999
 			z = k
 		print(liout)
 		meth2sol = []
 		for i in liout:
 			meth2sol.append(li[i])
 		self.connect(meth2sol, method2_colour, 2)
-
+		print(len(meth2sol))
 
 root = tk.Tk()
 a = Presentation(root)
