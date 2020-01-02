@@ -1,0 +1,12 @@
+liin=[]  #distance matrix input
+
+liin=input()
+liout=[]  #output cities
+for i in range(len(liin)):
+    del liin[i][i]
+    liin[i].insert(i,99999999)
+for i in range(len(liin)):
+    y=min(liin[i])
+    k=liin[i].index(y)
+    liout.append(k)
+print(liout)
