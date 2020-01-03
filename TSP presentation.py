@@ -49,17 +49,17 @@ class Presentation():
 
 	def variables(self):
 		self.t1 = tk.StringVar()
-		self.t1.set("time:\n0")
+		self.t1.set("time:\n0s")
 		self.d1 = tk.StringVar()
 		self.d1.set("distance\n0")
 
 		self.t2 = tk.StringVar()
-		self.t2.set("time:\n0")
+		self.t2.set("time:\n0s")
 		self.d2 = tk.StringVar()
 		self.d2.set("distance\n0")
 
 		self.t3 = tk.StringVar()
-		self.t3.set("time:\n0")
+		self.t3.set("time:\n0s")
 		self.d3 = tk.StringVar()
 		self.d3.set("distance\n0")
 
@@ -84,9 +84,9 @@ class Presentation():
 		method2.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(1))
 		method3 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 3", command =lambda: self.connect(li, method3_colour, 3))
 		method3.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(2))
-		gen10 = tk.Button(bar, bd = 0, bg = button_colour, text = "generate 10 points",command = lambda: self.show_points(10))
+		gen10 = tk.Button(bar, bd = 0, bg = button_colour, text = "generate 25 points",command = lambda: self.show_points(25))
 		gen10.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(3))
-		gen20 = tk.Button(bar, bd= 0, bg = button_colour, text = "generate 20 points",command = lambda: self.show_points(10))
+		gen20 = tk.Button(bar, bd= 0, bg = button_colour, text = "generate 20 points",command = lambda: self.show_points(20))
 		gen20.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(4))
 
 		clear = tk.Button(bar, bd = 0,  bg = button_colour, text = "clear", command = self.clear)
@@ -130,44 +130,51 @@ class Presentation():
 			x = i.x
 			y = i.y
 			self.cartesian.create_oval(x-1,y-1, x+1, y+1, fill = "black")
+		for i in self.dist_var:
+			i.set("distance:\n{}".format(0))
+		for j in self.time_var:
+			j.set("time:\n{}s".format(0))
 	def connect(self, l, c, v):
 		sumdis = 0
-		# try:
-		t0 = dt.time()
-		for i in range(len(l)-1):
-			x1 = l[i].x
-			y1 = l[i].y
-			x2 = l[i+1].x
-			y2 = l[i+1].y
-			d = l[i].distance(l[i+1])
-			sumdis +=d
-			#print(sumdis)
+		try:
+			t0 = dt.time()
+			for i in range(len(l)-1):
+				x1 = l[i].x
+				y1 = l[i].y
+				x2 = l[i+1].x
+				y2 = l[i+1].y
+				d = l[i].distance(l[i+1])
+				sumdis +=d
+				#print(sumdis)
+				self.cartesian.create_line(x1,y1,x2,y2, fill = c)
+			x1 = l[0].x
+			y1 = l[0].y
+			x2 = l[-1].x
+			y2 = l[-1].y
+			d = l[0].distance(l[-1])
+			sumdis+=d
+			sumdis = round(sumdis, 2)
 			self.cartesian.create_line(x1,y1,x2,y2, fill = c)
-		x1 = l[0].x
-		y1 = l[0].y
-		x2 = l[-1].x
-		y2 = l[-1].y
-		d = l[0].distance(l[-1])
-		sumdis+=d
-		sumdis = round(sumdis, 2)
-		t = dt.time() - t0
-		t = round(t, 2)
-		self.cartesian.create_line(x1,y1,x2,y2, fill = c)
 
-		self.dist_var[v-1].set("distance:\n{}".format(sumdis))
-		self.time_var[v-1].set("time:\n{}".format(t))
-		# except:
-		# 	d = 0
-		# 	t = 0
-		# 	self.dist_var[v-1].set("distance:\n{}".format(d))
-		# 	self.time_var[v-1].set("time:\n{}".format(t))
+			self.dist_var[v-1].set("distance:\n{}".format(sumdis))
+
+		except:
+			d = 0
+			t = 0
+			self.dist_var[v-1].set("distance:\n{}".format(d))
+			self.time_var[v-1].set("time:\n{}s".format(t))
 		print("d:"+str(d))
 	def clear(self):
 		global li
 		self.cartesian.delete("all")
 		li = []
+		for i in self.dist_var:
+			i.set("distance:\n{}".format(0))
+		for j in self.time_var:
+			j.set("time:\n{}s".format(0))
 
 	def method_1(self):
+		t0 = dt.time()
 		matrix = []
 		meth1sol = []
 		for i in li:
@@ -215,8 +222,14 @@ class Presentation():
 			meth1sol.append(li[i])
 		print(len(meth1sol))
 		self.connect(meth1sol, method1_colour, 1)
+		t1 = dt.time()
+		t = t1 - t0
+		t = round(t, 2)
+		self.t1.set("time:\n{}s".format(t))
 		
 	def method_2(self):
+		t0 = dt.time()
+
 		liin = []
 		for i in li:
 			r = []
@@ -246,9 +259,11 @@ class Presentation():
 			meth2sol.append(li[i])
 		self.connect(meth2sol, method2_colour, 2)
 		print(len(meth2sol))
+		t1 = dt.time()
+		t = t1 - t0
+		t = round(t,2)
+		self.t2.set("time:\n{}s".format(t))
 
 root = tk.Tk()
 a = Presentation(root)
-root.mainloop()
-
-		
+root.mainloop()		
