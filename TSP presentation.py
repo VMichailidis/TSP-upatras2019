@@ -82,7 +82,7 @@ class Presentation():
 		method1.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(0))
 		method2 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 2", command = self.method_2)
 		method2.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(1))
-		method3 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 3", command =lambda: self.connect(li, method3_colour, 3))
+		method3 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 3", command = self.method_3)
 		method3.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(2))
 		gen10 = tk.Button(bar, bd = 0, bg = button_colour, text = "generate 25 points",command = lambda: self.show_points(25))
 		gen10.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(3))
@@ -264,6 +264,14 @@ class Presentation():
 		t = round(t,2)
 		self.t2.set("time:\n{}s".format(t))
 
+
+	def method_3(self):
+		t0 = dt.time()
+		self.connect(li, method3_colour, 3)
+		t1 = dt.time()
+		t = t1 - t0
+		t = round(t,2)
+		self.t2.set("time:\n{}s".format(t))
 root = tk.Tk()
 a = Presentation(root)
 root.mainloop()		
