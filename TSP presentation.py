@@ -155,7 +155,7 @@ class Presentation():
 		for j in self.time_var:
 			j.set("time:\n{}s".format(0))
 	#the method which connects the points with a line coloured appropriately and calculates the distance the salesman travels
-		def connect(self, l, c, v):# l: the list of points, c: the line's colour, v: the method's position in the distance variable list 
+	def connect(self, l, c, v):# l: the list of points, c: the line's colour, v: the method's position in the distance variable list 
 		sumdis = 0
 		try:
 			t0 = dt.time()
