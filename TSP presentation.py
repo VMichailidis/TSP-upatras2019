@@ -3,7 +3,7 @@ import random as r
 import time as dt
 import pymprog as pm
 def bt_pos(n):
-	r = 50+n*(tab_width + 5)
+	r = n*(tab_width + 5)
 	return r
 def sd_pos(n):
 	r = 5+n*(75)
@@ -24,14 +24,16 @@ class Point():
 
 
 
-bar_colour = "yellow"
-square_colour = "gray"
+bar_colour = "#FFDE03"
+square_colour = "#795548"
+brown1 = "#8D6E63"
 button_colour = square_colour
-method1_colour = "blue"
-method2_colour = "red"
-method3_colour = "green"
+method1_colour = "#0336FF"
+method2_colour = "#FF0266"
+method3_colour = "#00E676"
 
 
+font = "Arial 20"
 
 
 tab_height = 75
@@ -78,41 +80,41 @@ class Presentation():
 		self.cartesian = tk.Canvas(square)
 		self.cartesian.place(width = 1100, height = 650, x = 50, y = 50)
 #bar Buttons
-		method1 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 1", command = lambda: self.method_1())
+		method1 = tk.Button(bar, bd = 0, bg = button_colour,activebackground = brown1, font = font, text = "method 1", command = lambda: self.method_1())
 		method1.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(0))
-		method2 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 2", command = self.method_2)
+		method2 = tk.Button(bar, bd = 0, bg = button_colour,activebackground = brown1, font = font, text = "method 2", command = self.method_2)
 		method2.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(1))
-		method3 = tk.Button(bar, bd = 0, bg = button_colour, text = "method 3", command = self.method_3)
+		method3 = tk.Button(bar, bd = 0, bg = button_colour,activebackground = brown1, font = font, text = "method 3", command = self.method_3)
 		method3.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(2))
-		gen10 = tk.Button(bar, bd = 0, bg = button_colour, text = "generate 25 points",command = lambda: self.show_points(25))
-		gen10.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(3))
-		gen20 = tk.Button(bar, bd= 0, bg = button_colour, text = "generate 20 points",command = lambda: self.show_points(20))
-		gen20.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(4))
+		gen10 = tk.Button(bar, bd = 0, bg = button_colour,activebackground = brown1, font = font, text = "generate 25 points",command = lambda: self.show_points(25))
+		gen10.place(height = tab_height, width = 250, y = 25, x = bt_pos(3))
+		gen20 = tk.Button(bar, bd= 0, bg = button_colour,activebackground = brown1, font = font, text = "generate 20 points",command = lambda: self.show_points(20))
+		gen20.place(height = tab_height, width = 250, y = 25, x = bt_pos(4)+105)
 
-		clear = tk.Button(bar, bd = 0,  bg = button_colour, text = "clear", command = self.clear)
-		clear.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(5))
+		clear = tk.Button(bar, bd = 0,  bg = button_colour,activebackground = brown1, font = font, text = "clear", command = self.clear)
+		clear.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(5)+210)
 #Results
 	#method 1
-		method1_label = tk.Label(sidebar, bg = method1_colour, text="mehtod 1")
+		method1_label = tk.Label(sidebar, bg = method1_colour, font = font, text="mehtod 1")
 		method1_label.place(width = tab_width, height = 75, y = sd_pos(0), x = 5)
-		self.method1_time = tk.Label(sidebar, bg = method1_colour, textvariable = self.t1)
+		self.method1_time = tk.Label(sidebar, bg = method1_colour, font = font, textvariable = self.t1)
 		self.method1_time.place(width = tab_width, height = 75, y = sd_pos(1), x = 5)
-		self.method1_distance = tk.Label(sidebar, bg = method1_colour, textvariable = self.d1)
+		self.method1_distance = tk.Label(sidebar, bg = method1_colour, font = font, textvariable = self.d1)
 		self.method1_distance.place(width = tab_width, height = 75, y = sd_pos(2), x = 5)
 	#method 2
-		method2_label = tk.Label(sidebar, bg = method2_colour, text="mehtod 2")
-		method2_label.place(width = tab_width, height = 75, y = sd_pos(3), x = 5)
-		self.method2_time = tk.Label(sidebar, bg = method2_colour, textvariable = self.t2)
-		self.method2_time.place(width = tab_width, height = 75, y = sd_pos(4), x = 5)
-		self.method2_distance = tk.Label(sidebar, bg = method2_colour,textvariable = self.d2)
-		self.method2_distance.place(width = tab_width, height = 75, y = sd_pos(5), x = 5)
+		method2_label = tk.Label(sidebar, bg = method2_colour, font = font, text="mehtod 2")
+		method2_label.place(width = tab_width, height = 75, y = sd_pos(3)+5, x = 5)
+		self.method2_time = tk.Label(sidebar, bg = method2_colour, font = font, textvariable = self.t2)
+		self.method2_time.place(width = tab_width, height = 75, y = sd_pos(4)+5, x = 5)
+		self.method2_distance = tk.Label(sidebar, bg = method2_colour, font = font, textvariable = self.d2)
+		self.method2_distance.place(width = tab_width, height = 75, y = sd_pos(5)+5, x = 5)
 	#method 3
-		method3_label = tk.Label(sidebar, bg = method3_colour, text="method 3")
-		method3_label.place(width = tab_width, height = 75, y = sd_pos(6), x = 5)
-		self.method3_time = tk.Label(sidebar, bg = method3_colour, textvariable = self.t3)
-		self.method3_time.place(width = tab_width, height = 75, y = sd_pos(7), x = 5)
-		self.method3_distance = tk.Label(sidebar, bg = method3_colour, textvariable = self.d3)
-		self.method3_distance.place(width = tab_width, height = 75, y = sd_pos(8), x = 5)
+		method3_label = tk.Label(sidebar, bg = method3_colour, font = font, text="method 3")
+		method3_label.place(width = tab_width, height = 75, y = sd_pos(6)+10, x = 5)
+		self.method3_time = tk.Label(sidebar, bg = method3_colour, font = font, textvariable = self.t3)
+		self.method3_time.place(width = tab_width, height = 75, y = sd_pos(7)+10, x = 5)
+		self.method3_distance = tk.Label(sidebar, bg = method3_colour, font = font, textvariable = self.d3)
+		self.method3_distance.place(width = tab_width, height = 75, y = sd_pos(8)+10, x = 5)
 
 
 	def load_points(self, n):
@@ -271,7 +273,7 @@ class Presentation():
 		t1 = dt.time()
 		t = t1 - t0
 		t = round(t,2)
-		self.t2.set("time:\n{}s".format(t))
+		self.t3.set("time:\n{}s".format(t))
 root = tk.Tk()
 a = Presentation(root)
 root.mainloop()		
