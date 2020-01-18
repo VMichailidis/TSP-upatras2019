@@ -36,6 +36,12 @@ method1_colour = "#0336FF"
 method2_colour = "#FF0266"
 method3_colour = "#00E676"
 
+distance1 = 0
+distance2 = 0
+distance3 = 0
+
+distances = [distance1, distance2, distance3]
+
 
 font = "Arial 20"
 
@@ -58,6 +64,7 @@ class Presentation():
 		self.t1.set("time:\n0s")
 		self.d1 = tk.StringVar()
 		self.d1.set("distance\n0")
+
 
 		self.t2 = tk.StringVar()
 		self.t2.set("time:\n0s")
@@ -93,7 +100,7 @@ class Presentation():
 		method1 = tk.Button(bar, bd = 0, bg = button_colour,activebackground = brown1, font = font, text = "method 1", command = lambda: self.method_1())
 		method1.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(0))
 		#the button for method 2 (closest point)
-		method2 = tk.Button(bar, bd = 0, bg = button_colour,activebackground = brown1, font = font, text = "method 2", command = self.method_2)
+		method2 = tk.Button(bar, bd = 0, bg = button_colour,activebackground = brown1, font = font, text = "method 2", command = self.method_b)
 		method2.place(height = tab_height, width = tab_width, y = 25, x = bt_pos(1))
 		#the button for method 3 (the Heinritz-Hsiao) method)
 		method3 = tk.Button(bar, bd = 0, bg = button_colour,activebackground = brown1, font = font, text = "method 3", command = self.method_3)
@@ -187,6 +194,29 @@ class Presentation():
 		#print("d:"+str(d))
 
 	#the method which clears the plane and the labels displaying the measurments 
+
+	def distance_calculator(self, l):
+		sumdis = 0
+
+		t0 = dt.time()
+		for i in range(len(l)-1):
+			x1 = l[i].x
+			y1 = l[i].y
+			x2 = l[i+1].x
+			y2 = l[i+1].y
+			d = l[i].distance(l[i+1])
+			sumdis +=d
+			#print(sumdis)
+		x1 = l[0].x
+		y1 = l[0].y
+		x2 = l[-1].x
+		y2 = l[-1].y
+		d = l[0].distance(l[-1])
+		sumdis+=d
+		sumdis = round(sumdis, 2)
+
+		return sumdis
+
 	def clear(self):
 		global li
 		self.cartesian.delete("all")
@@ -257,13 +287,13 @@ class Presentation():
 		t = round(t, 2)#the required time is calculated and rounded for conviniency
 		self.t1.set("time:\n{}s".format(t))
 	#the Heinritz-Hsiao method
-	def method_2(self):
+	def method_2(self,lib):
 		t0 = dt.time()#timer start
 
 		liin = []#similarly to method 1 a distance matrix is created
-		for i in li:
+		for i in lib:
 			r = []
-			for j in li:
+			for j in lib:
 				r.append(i.distance(j))
 			liin.append(r)
 		#print("liin: {}".format(liin))
@@ -287,12 +317,35 @@ class Presentation():
 		meth2sol = []
 		for i in liout:#now the solution is added to a list that can be interpreted by the connect method
 			meth2sol.append(li[i])
-		self.connect(meth2sol, method2_colour, 2)
+		
 		print(len(meth2sol))
 		t1 = dt.time()
 		t = t1 - t0
 		t = round(t,2)#the required time is calculated and rounded for conviniency
+		return meth2sol
 		self.t2.set("time:\n{}s".format(t))
+
+	def method_b(self):
+		lib = li
+		sol = self.method_2(lib)
+		print(sol)
+		dsol = self.distance_calculator(sol)
+		print(dsol)
+		for s in range(len(lib)):
+			for k in range(len(lib)-1):
+				l = lib[0]
+				lib.pop(0)
+				lib.append(l)
+
+			l2 = self.method_2(lib)
+			d2 = self.distance_calculator(lib)
+			if d2 < dsol:
+				sol = l2
+				dsol = d2
+
+		self.connect(sol, method2_colour, 2)	
+
+
 
 
 	def method_3(self):# this method just connects the points in the order they were generated
