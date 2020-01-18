@@ -350,13 +350,27 @@ class Presentation():
 
 
 
-	def method_3(self):# this method just connects the points in the order they were generated
+		
+	def method_3(self):
 		t0 = dt.time()
-		self.connect(li, method3_colour, 3)
+		libsol = li[:]
+		lib3 = li[:]
+		distance3 = self.distance_calculator(lib3)
+		#print("distance3: {}".format(distance3))
+		for i in range(10000):
+			r.shuffle(lib3)
+			d3 = self.distance_calculator(lib3)
+			#print("d3: {}".format(d3))
+			if d3 < distance3:
+				distance3 = d3
+				libsol = lib3[:]
+			#print("distance3: {}".format(distance3))
+		self.connect(libsol, method3_colour, 3)
 		t1 = dt.time()
 		t = t1 - t0
 		t = round(t,2)
 		self.t3.set("time:\n{}s".format(t))
+
 root = tk.Tk()
 a = Presentation(root)
 root.mainloop()		
