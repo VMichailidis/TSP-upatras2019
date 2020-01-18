@@ -288,7 +288,7 @@ class Presentation():
 		self.t1.set("time:\n{}s".format(t))
 	#the Heinritz-Hsiao method
 	def method_2(self,lib):
-		t0 = dt.time()#timer start
+		
 
 		liin = []#similarly to method 1 a distance matrix is created
 		for i in lib:
@@ -319,17 +319,16 @@ class Presentation():
 			meth2sol.append(li[i])
 		
 		#print(len(meth2sol))
-		t1 = dt.time()
-		t = t1 - t0
-		t = round(t,2)#the required time is calculated and rounded for conviniency
+		#the required time is calculated and rounded for conviniency
 		return meth2sol
-		self.t2.set("time:\n{}s".format(t))
+		
 
 	def method_b(self):
+		t0 = dt.time()#timer start
 		lib = li
 		sol = self.method_2(lib)
 		dsol = self.distance_calculator(sol)
-		print("dsol:{}".format(dsol))
+		#print("dsol:{}".format(dsol))
 		for s in range(len(lib)):
 			for k in range(len(lib)-1):
 				l = lib[0]
@@ -338,13 +337,16 @@ class Presentation():
 
 			l2 = self.method_2(lib)
 			d2 = self.distance_calculator(l2)
-			print("d2:{}".format(d2))
+			#print("d2:{}".format(d2))
 			if d2 < dsol:
 				sol = l2
 				dsol = d2
-			print("dsol:{}".format(dsol))
-		self.connect(sol, method2_colour, 2)	
-
+			#print("dsol:{}".format(dsol))
+		self.connect(sol, method2_colour, 2)
+		t1 = dt.time()
+		t = t1 - t0
+		t = round(t,2)	
+		self.t2.set("time:\n{}s".format(t))
 
 
 
