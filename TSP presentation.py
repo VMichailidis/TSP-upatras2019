@@ -318,7 +318,7 @@ class Presentation():
 		for i in liout:#now the solution is added to a list that can be interpreted by the connect method
 			meth2sol.append(li[i])
 		
-		print(len(meth2sol))
+		#print(len(meth2sol))
 		t1 = dt.time()
 		t = t1 - t0
 		t = round(t,2)#the required time is calculated and rounded for conviniency
@@ -328,9 +328,8 @@ class Presentation():
 	def method_b(self):
 		lib = li
 		sol = self.method_2(lib)
-		print(sol)
 		dsol = self.distance_calculator(sol)
-		print(dsol)
+		print("dsol:{}".format(dsol))
 		for s in range(len(lib)):
 			for k in range(len(lib)-1):
 				l = lib[0]
@@ -338,11 +337,12 @@ class Presentation():
 				lib.append(l)
 
 			l2 = self.method_2(lib)
-			d2 = self.distance_calculator(lib)
+			d2 = self.distance_calculator(l2)
+			print("d2:{}".format(d2))
 			if d2 < dsol:
 				sol = l2
 				dsol = d2
-
+			print("dsol:{}".format(dsol))
 		self.connect(sol, method2_colour, 2)	
 
 
